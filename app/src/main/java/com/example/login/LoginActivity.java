@@ -2,7 +2,6 @@ package com.example.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -37,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         // Retrieve user data from the database
         if (authenticateUser(username, password)) {
             // Authentication successful
-            startHomeActivity();
+            startHomeActivity(username);
         } else {
             // Authentication failed
             Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
@@ -74,10 +73,10 @@ public class LoginActivity extends AppCompatActivity {
         return isAuthenticated;
     }
 
-    private void startHomeActivity() {
+    private void startHomeActivity(String username) {
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("USERNAME", username);
         startActivity(intent);
         finish();
     }
 }
-

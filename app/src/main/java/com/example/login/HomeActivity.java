@@ -1,8 +1,4 @@
-package com.example.login;
-// HomeActivity.java
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
+package com.example.login;// HomeActivity.java
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,9 +23,8 @@ public class HomeActivity extends AppCompatActivity {
         firstNameTextView = findViewById(R.id.firstNameTextView);
         lastNameTextView = findViewById(R.id.lastNameTextView);
 
-        // Retrieve logged-in user's username from SharedPreferences
-        SharedPreferences preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        String loggedInUsername = preferences.getString("username", "");
+        // Retrieve logged-in user's username from intent
+        String loggedInUsername = getIntent().getStringExtra("USERNAME");
 
         // Retrieve user data from the database based on the logged-in username
         displayUserData(loggedInUsername);
@@ -59,10 +54,16 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         if (cursor.moveToFirst()) {
-            @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex(UserContract.UserEntry.COLUMN_FIRST_NAME));
-            @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex(UserContract.UserEntry.COLUMN_LAST_NAME));
-            @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(UserContract.UserEntry.COLUMN_EMAIL));
-            @SuppressLint("Range") String phone = cursor.getString(cursor.getColumnIndex(UserContract.UserEntry.COLUMN_PHONE));
+            int firstNameIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_FIRST_NAME);
+            int lastNameIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_LAST_NAME);
+            int emailIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_EMAIL);
+            int phoneIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_PHONE);
+
+            // Check if column indexes are valid before retrieving data
+            String firstName = (firstNameIndex != -1) ? cursor.getString(firstNameIndex) : "";
+            String lastName = (lastNameIndex != -1) ? cursor.getString(lastNameIndex) : "";
+            String email = (emailIndex != -1) ? cursor.getString(emailIndex) : "";
+            String phone = (phoneIndex != -1) ? cursor.getString(phoneIndex) : "";
 
             // Display user information in TextViews
             usernameTextView.setText("Username: " + username);
